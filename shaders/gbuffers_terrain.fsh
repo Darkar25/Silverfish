@@ -24,7 +24,7 @@ uniform float viewHeight;
 #else
     layout(location = 0) out vec4 color;
 	layout(location = 1) out vec4 terrain_buffer;
-#endif
+#endif // IS_IRIS
 
 void main() {
 	color = texture(gtexture, texcoord) * glcolor;

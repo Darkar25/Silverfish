@@ -6,7 +6,7 @@
     #define color gl_FragData[0]
 #else
     layout(location = 0) out vec4 color;
-#endif
+#endif // IS_IRIS
 
 void main() {
 	color = texture(gtexture, texcoord) * glcolor;

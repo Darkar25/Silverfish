@@ -4,8 +4,6 @@
 attribute vec4 mc_Entity;
 out flat int entityID;
 
-//uniform mat4 gbufferPreviousModelView;
-//uniform mat4 gbufferPreviousProjection;
 uniform mat4 shadowModelViewInverse;
 uniform mat4 gbufferPreviousModelViewInverse;
 

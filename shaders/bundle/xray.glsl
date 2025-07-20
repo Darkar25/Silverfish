@@ -13,13 +13,13 @@ bool shouldXray(int blockID) {
 	if(
 	#ifdef XRAY_USE_SET_MISC
 		blockID == XRAY_SET_MISC ||
-	#endif
+	#endif // XRAY_USE_SET_MISC
 	#ifdef XRAY_USE_SET_LIQUIDS
 		blockID == XRAY_SET_LIQUIDS ||
-	#endif
+	#endif // XRAY_USE_SET_LIQUIDS
 	#ifdef XRAY_USE_SET_CUSTOM
 		blockID == XRAY_SET_CUSTOM ||
-	#endif
+	#endif // XRAY_USE_SET_CUSTOM
 	false)
 		return true;
 	
@@ -31,16 +31,16 @@ bool shouldXray(int blockID) {
 	#if XRAY_ENABLED == STATE_ENABLED
 		#ifdef XRAY_BASIC_USE_KNOWN_ORE
 			if (IS_KNOWN_ORE(blockID) && GET_KNOWN_ORE(blockID) == XRAY_BASIC_KNOWN_ORE)
-		#endif
+		#endif // XRAY_BASIC_USE_KNOWN_OREd
 		#ifdef XRAY_BASIC_USE_MODID
 			if (GET_MODID(blockID) == XRAY_BASIC_MODID)
-		#endif
-			included = true;
+		#endif // XRAY_BASIC_USE_MODID
+		included = true;
 	#elif XRAY_ENABLED == STATE_ADVANCED
 
 		#if XRAY_BASE_SET == SET_ALL
 			included = true;
-		#endif
+		#endif // XRAY_BASE_SET
 		
 		if(IS_KNOWN_ORE(blockID))
 		switch (GET_KNOWN_ORE(blockID)) {
@@ -969,7 +969,7 @@ bool shouldXray(int blockID) {
 			#undef _MOD_STATE
 			#undef _MOD
 		}
-	#endif
+	#endif // XRAY_ENABLED
 	
     return included;
 }

@@ -18,13 +18,12 @@ uniform float viewHeight;
     #define color gl_FragData[0]
 #else
     layout(location = 0) out vec4 color;
-#endif
+#endif // IS_IRIS
 
 void main() {
 	vec2 screenCoord = gl_FragCoord.xy / vec2(viewWidth, viewHeight);
     vec4 originalSceneColor = texture(gcolor, screenCoord);
     
-    // Read the mask from the alpha channel of our entity tag buffer.
     // Use textureLod with a bias of 0.0 for a sharp, unbiased sample.
     float isCenterEntity = textureLod(colortex2, screenCoord, 0.0).a;
 
@@ -32,7 +31,6 @@ void main() {
     // The GPU automatically selects the base mip level and we add our bias.
     float glowAmount = texture(colortex2, screenCoord, RENDER_GLOW_RADIUS).a;
 
-    // You might want to apply a curve to the glow to make it fall off more nicely
     glowAmount = pow(glowAmount, 2.0);
 
     // Prevents the entity from glowing on top of itself

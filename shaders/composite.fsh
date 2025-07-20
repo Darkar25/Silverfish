@@ -35,7 +35,7 @@ uniform float viewHeight;
 #else
     layout(location = 0) out vec4 color;
     layout(location = 1) out vec4 glowColor;
-#endif
+#endif // IS_IRIS
 
 vec3 getGlowXrayColor(int modId);
 vec3 getGlowESPColor(int modId);
@@ -66,19 +66,19 @@ void main() {
         #ifdef XRAY_RENDER_ONTOP
             if(terrainLayer.r > EPSILON)
                 cfOverride = true;
-        #endif
+        #endif // XRAY_RENDER_ONTOP
         #ifdef XRAY_RENDER_OCCLUSION
             if(terrainLayer.r > EPSILON)
                 if(terrainLayer.r - sceneDepth < EPSILON)
                     color = vec4(XRAY_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
                 else
                     color = vec4(XRAY_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
-        #endif
+        #endif // XRAY_RENDER_OCCLUSION
         #ifdef XRAY_RENDER_GLOW
             if(terrainLayer.r > EPSILON)
                 glowColor = vec4(getGlowXrayColor(int(terrainLayer.g)), 1.0);
-        #endif
-    #endif
+        #endif // XRAY_RENDER_GLOW
+    #endif // XRAY_ENABLED
     #ifdef ESP_ENABLED
         vec4 espLayer = texture(colortex5, screenCoord);
         #ifndef ESP_RENDER_ONTOP
@@ -87,19 +87,19 @@ void main() {
         #else
             if(espLayer.r > EPSILON)
                 cfOverride = true;
-        #endif
+        #endif // ESP_RENDER_ONTOP
         #ifdef ESP_RENDER_OCCLUSION
             if(espLayer.r > EPSILON)
                 if(espLayer.r - sceneDepth < EPSILON)
                     color = vec4(ESP_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
                 else
                     color = vec4(ESP_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
-        #endif
+        #endif // ESP_RENDER_OCCLUSION
         #ifdef ESP_RENDER_GLOW
             if(espLayer.r > EPSILON)
                 glowColor = vec4(getGlowESPColor(int(espLayer.g)), 1.0);
-        #endif
-    #endif
+        #endif // ESP_RENDER_GLOW
+    #endif // ESP_ENABLED
     #ifdef CHESTESP_ENABLED
         vec4 chestespLayer = texture(colortex6, screenCoord);
         #ifndef CHESTESP_RENDER_ONTOP
@@ -108,19 +108,19 @@ void main() {
         #else
             if(chestespLayer.r > EPSILON)
                 cfOverride = true;
-        #endif
+        #endif // CHESTESP_RENDER_ONTOP
         #ifdef CHESTESP_RENDER_OCCLUSION
             if(chestespLayer.r > EPSILON)
                 if(chestespLayer.r - sceneDepth < EPSILON)
                     color = vec4(CHESTESP_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
                 else
                     color = vec4(CHESTESP_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
-        #endif
+        #endif // CHESTESP_RENDER_OCCLUSION
         #ifdef CHESTESP_RENDER_GLOW
             if(chestespLayer.r > EPSILON)
                 glowColor = vec4(getGlowChestESPColor(int(chestespLayer.g)), 1.0);
-        #endif
-    #endif
+        #endif // CHESTESP_RENDER_GLOW
+    #endif // CHESTESP_ENABLED
     #ifdef CAVEFINDER
         if(cfOverride)
             return;
@@ -128,12 +128,11 @@ void main() {
         if(hwDepth > sceneDepth) {
             color = mix(color, texture(shadowcolor0, screenCoord), CAVEFINER_RENDER_TRANSPARENCY / 100.0);
         }
-    #endif
+    #endif // CAVEFINDER
     // Fix up the hand depth
     if(texture(colortex3, screenCoord).r == 1.0) {
         color = texture(gcolor, screenCoord);
     }
-    //color = vec4(vec3(sceneDepth), 1.0);
 }
 
 vec3 getGlowXrayColor(int modId) {

@@ -22,16 +22,16 @@ void main()
 		if(
 		#ifdef CHESTESP_SELECT_CHEST
 			blockEntityID == BLOCK_MINECRAFT_CHEST ||
-		#endif
+		#endif // CHESTESP_SELECT_CHEST
 		#ifdef CHESTESP_SELECT_TRAPPED_CHEST
 			blockEntityID == BLOCK_MINECRAFT_TRAPPED_CHEST ||
-		#endif
+		#endif // CHESTESP_SELECT_TRAPPED_CHEST
 		#ifdef CHESTESP_SELECT_ENDER_CHEST
 			blockEntityID == BLOCK_MINECRAFT_ENDER_CHEST ||
-		#endif
+		#endif // CHESTESP_SELECT_ENDER_CHEST
 		#ifdef CHESTESP_SELECT_OTHER
 			blockEntityID > 0 ||
-		#endif
+		#endif // CHESTESP_SELECT_OTHER
 		false)
 		{
 			drawVertexOnTop();

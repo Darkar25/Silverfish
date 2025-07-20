@@ -16,11 +16,11 @@ bool shouldEsp(int entityID) {
 	#if ESP_GROUP_OTHER != INHERIT
 		if(entityID > 200)
 			return ESP_GROUP_OTHER == INCLUDE;
-	#endif
+	#endif // ESP_GROUP_OTHER
 	
 	#if ESP_BASE_SET == SET_ALL
 		included = true;
-	#endif
+	#endif // ESP_BASE_SET
 	
 	switch(entityID) {
 		#/**/define _GROUP_STATE	ESP_GROUP_PEACEFUL

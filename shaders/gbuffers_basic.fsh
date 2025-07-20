@@ -8,12 +8,12 @@
     #define color gl_FragData[0]
 #else
     layout(location = 0) out vec4 color;
-#endif
+#endif // IS_IRIS
 
 void main() {
     #ifndef FULLBRIGHT
 	    color *= texture(lightmap, lmcoord);
-    #endif
+    #endif // FULLBRIGHT
 
 	if (color.a < alphaTestRef) {
 		discard;
