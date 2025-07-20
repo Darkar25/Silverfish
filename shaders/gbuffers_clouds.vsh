@@ -3,4 +3,5 @@
 
 void main() {
 	DEFAULT_VERTEX_IMPLEMENTATION();
+	glcolor = gl_Color;
 }
