@@ -1,0 +1,17 @@
+#ifndef INCLUDE_ENUM_MODID
+#/**/define INCLUDE_ENUM_MODID
+
+#define MINECRAFT 				0
+#define INDUSTRIAL_CRAFT 		1
+#define IMMERSIVE_ENGINEERING 	2
+#define MEKANISM 				3
+#define DRACONIC_EVOLUTION 		4
+#define THERMAL_FOUNDATION 		5
+#define BIG_REACTORS			6
+#define APPLIED_ENERGISTICS 	7
+#define BIOMES_O_PLENTY 		8
+#define FORESTRY 				9
+#define TINKERS_CONSTRUCT 		10
+#define RAILCRAFT 				11
+
+#endif

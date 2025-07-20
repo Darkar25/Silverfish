@@ -1,0 +1,8 @@
+#ifndef INCLUDE_ENUM_STATE
+#/**/define INCLUDE_ENUM_STATE
+
+#define STATE_DISABLED		0
+#define STATE_ENABLED		1
+#define STATE_ADVANCED		2
+
+#endif
