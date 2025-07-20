@@ -11,6 +11,8 @@
 #endif // IS_IRIS
 
 void main() {
+    color = glcolor;
+
     #ifndef FULLBRIGHT
 	    color *= texture(lightmap, lmcoord);
     #endif // FULLBRIGHT
