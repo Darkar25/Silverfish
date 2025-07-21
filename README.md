@@ -1,7 +1,6 @@
-<img width="64" height="64" alt="SilverFish icon HD" src="https://github.com/user-attachments/assets/25cf00c8-26c6-41e2-ac58-276f1a7e7414" align="left" hspace="15" />
+<img width="72" height="72" alt="SilverFish icon HD" src="https://github.com/user-attachments/assets/25cf00c8-26c6-41e2-ac58-276f1a7e7414" align="left" hspace="15" />
 
 Silverfish is an experiment exploring what would happen if a shaderpack developer turned to the dark side, creating a shader with visual "enhancements" rather than genuine visual enhancements.
-
 
 ## Disclaimer
 
@@ -75,7 +74,8 @@ Quickly disables all features, making the shader behave like the vanilla rendere
 Probably works on all minecraft versions from 1.7.2 to the latest with OptiFine & Iris.
 
 ## Installation guide
-1. Download the Silverfish shaderpack
-2. Navigate to your minecraft directory (%appdata%/.minecraft/)
-3. Drop the "Silverfish" folder in the "shaderpacks" directory
-4. Select the "Silverfish" shaderpack in the OptiFine/Iris shaderpack selection list
+1. Install any version of OptiFine or Iris
+2. Download the Silverfish shaderpack
+3. Navigate to your minecraft directory (%appdata%/.minecraft/)
+4. Drop the "Silverfish" folder in the "shaderpacks" directory
+5. Select the "Silverfish" shaderpack in the OptiFine/Iris shaderpack selection list
