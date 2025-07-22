@@ -13,6 +13,7 @@ void main() {
 	entityID = entityId;
 	
 	DEFAULT_VERTEX_IMPLEMENTATION();
+	APPLY_SIMPLE_LIGHTING(0.6);
 
 	viewPosition = gl_ModelViewMatrix * gl_Vertex;
 	

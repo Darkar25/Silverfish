@@ -38,5 +38,14 @@ void main() {
 
     texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
-	glcolor = gl_Color;
+    glcolor = gl_Color;
+
+    if (entityID == 0) {
+        APPLY_SIMPLE_LIGHTING(0.6);
+    }
+    #ifdef IS_IRIS
+        else {
+            APPLY_SIMPLE_LIGHTING();
+        }
+    #endif // IS_IRIS
 }

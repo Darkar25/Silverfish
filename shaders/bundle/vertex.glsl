@@ -18,15 +18,25 @@ void DEFAULT_VERTEX_IMPLEMENTATION() {
 	gl_Position = gbufferPreviousProjection * gbufferPreviousModelView * gbufferModelViewInverse * gl_ModelViewMatrix * gl_Vertex;
 	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
+	glcolor = gl_Color;
+}
 
-	//Calculate view space normal.
-    vec3 normal = gl_NormalMatrix * gl_Normal;
-    normal = (gbufferModelViewInverse * vec4(normal,0)).xyz;
+void APPLY_SIMPLE_LIGHTING(float aoMult) {
+	const vec3 sunDirection = normalize(vec3(1.0, 1.0, 0.6));
+	const float ambientStrength = 0.9;
+	const float diffuseStrength = 1 - ambientStrength;
 
-    //Calculate simple lighting. Thanks to @PepperCode1
-    float light = min(normal.x * normal.x * 0.6f + normal.y * normal.y * 0.25f * (3.0f + normal.y) + normal.z * normal.z * 0.8f, 1.0f);
+	vec3 viewNormal = normalize(gl_NormalMatrix * gl_Normal);
+    vec3 worldNormal = normalize((gbufferModelViewInverse * vec4(viewNormal, 0.0)).xyz);
+    float diffuseFactor = max(dot(worldNormal, sunDirection), 0.0);
+    float light = ambientStrength + (diffuseStrength * diffuseFactor);
+    float upFacingFactor = (worldNormal.y * 0.5 + 0.5);
+    float aoFactor = mix(aoMult, 1.0, upFacingFactor);
+    glcolor.rgb *= light * aoFactor;
+}
 
-	glcolor = vec4(gl_Color.rgb * light, gl_Color.a);
+void APPLY_SIMPLE_LIGHTING() {
+	APPLY_SIMPLE_LIGHTING(0.9);
 }
 
 #endif
