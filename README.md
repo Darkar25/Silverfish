@@ -67,6 +67,9 @@ Disables rain and snow effects.
 ### Kill Switch
 Quickly disables all features, making the shader behave like the vanilla renderer.
 
+### Toggleable UI
+Quickly disable visual features using F1, without triggering the killswitch.
+
 ## Tested Versions
 - **1.7.10** (OptiFine)
 - **1.21.4** (OptiFine & Iris)
