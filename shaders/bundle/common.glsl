@@ -7,6 +7,8 @@
 
 #include "/enum/bufferformat.glsl"
 
+uniform int hideGUI;
+
 const float EPSILON = 0.0001;
 
 /*

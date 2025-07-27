@@ -34,7 +34,7 @@ void main() {
     }
 
     // If the vertex was not culled, transform it normally.
-    gl_Position = gbufferPreviousProjection * gbufferPreviousModelView * shadowModelViewInverse * gl_ModelViewMatrix * gl_Vertex;
+    gl_Position = gbufferProjection * gbufferPreviousModelView * shadowModelViewInverse * gl_ModelViewMatrix * gl_Vertex;
 
     texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;

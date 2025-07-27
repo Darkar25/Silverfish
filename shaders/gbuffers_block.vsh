@@ -2,6 +2,7 @@
 #include "/bundle/vertex.glsl"
 
 #include "/settings/chestesp.glsl"
+#include "/settings/toggleableui.glsl"
 
 #include "/enum/tileentity.glsl"
 
@@ -22,7 +23,7 @@ void main()
 	viewPosition = gl_ModelViewMatrix * gl_Vertex;
 	
 	#ifdef CHESTESP_ENABLED
-		if(
+		if((
 		#ifdef CHESTESP_SELECT_CHEST
 			blockEntityID == BLOCK_MINECRAFT_CHEST ||
 		#endif // CHESTESP_SELECT_CHEST
@@ -35,7 +36,11 @@ void main()
 		#ifdef CHESTESP_SELECT_OTHER
 			blockEntityID > 0 ||
 		#endif // CHESTESP_SELECT_OTHER
-		false)
+		false) && (
+		#ifdef TOGGLEABLE_UI_ENABLED
+			hideGUI == 1 &&
+		#endif
+		true))
 		{
 			drawVertexOnTop();
 			isEspEntity = 1;

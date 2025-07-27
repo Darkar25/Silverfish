@@ -2,6 +2,7 @@
 #include "/bundle/vertex.glsl"
 
 #include "/settings/esp.glsl"
+#include "/settings/toggleableui.glsl"
 #include "/bundle/esp.glsl"
 
 uniform int entityId;
@@ -18,7 +19,11 @@ void main() {
 	viewPosition = gl_ModelViewMatrix * gl_Vertex;
 	
 	#ifdef ESP_ENABLED
-		if (shouldEsp(entityID)) {
+		if (shouldEsp(entityID) && (
+		#ifdef TOGGLEABLE_UI_ENABLED
+			hideGUI == 1 &&
+		#endif
+		true)) {
 			drawVertexOnTop();
 			isEspEntity = 1;
 		}

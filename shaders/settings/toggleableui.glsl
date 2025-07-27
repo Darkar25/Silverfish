@@ -1,0 +1,6 @@
+#ifndef INCLUDE_SETTINGS_TOGGLEABLEUI
+#/**/define INCLUDE_SETTINGS_TOGGLEABLEUI
+
+// #define TOGGLEABLE_UI_ENABLED // Toggleable UI (F1)
+
+#endif

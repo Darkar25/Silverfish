@@ -7,7 +7,7 @@ out vec4 glcolor;
 
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferPreviousModelView;
-uniform mat4 gbufferPreviousProjection;
+uniform mat4 gbufferProjection;
 
 void drawVertexOnTop() {
 	gl_Position.z = mix(-gl_Position.w, gl_Position.z, 0.75);
@@ -15,7 +15,8 @@ void drawVertexOnTop() {
 
 void DEFAULT_VERTEX_IMPLEMENTATION() {
 	// Intentional 1-frame lag to compensate for shadow-pass
-	gl_Position = gbufferPreviousProjection * gbufferPreviousModelView * gbufferModelViewInverse * gl_ModelViewMatrix * gl_Vertex;
+	gl_Position = gbufferProjection * gbufferPreviousModelView * gbufferModelViewInverse * gl_ModelViewMatrix * gl_Vertex;
+	//gl_Position = ftransform();
 	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
 	glcolor = gl_Color;
