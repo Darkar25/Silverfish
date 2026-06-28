@@ -14,7 +14,6 @@
 
 uniform sampler2D gcolor;
 uniform sampler2D colortex3; // Hand
-uniform sampler2D colortex4; // Terrain
 uniform sampler2D colortex5; // Entities
 uniform sampler2D colortex6; // TileEntities
 
@@ -24,6 +23,7 @@ uniform mat4 gbufferProjectionInverse;
 uniform sampler2D shadowtex0;
 uniform sampler2D depthtex0;
 uniform sampler2D shadowcolor0;
+uniform sampler2D shadowcolor1;
 
 uniform float viewWidth;
 uniform float viewHeight;
@@ -48,52 +48,62 @@ float linearizeDepthFast(float depth) {
 
 void main() {
     vec2 screenCoord = gl_FragCoord.xy / vec2(viewWidth, viewHeight);
-    float depth = texture(shadowtex0, screenCoord).x;
-    vec3 ndc;
-    ndc.xy = screenCoord * 2.0 - 1.0;
-    ndc.z = depth * 2.0 - 1.0;
-    vec4 viewPosFromDepth = gbufferProjectionInverse * vec4(ndc, 1.0);
-    viewPosFromDepth.xyz /= viewPosFromDepth.w;
-    float sceneDepth = -viewPosFromDepth.z / (far * 4.0);
-	color = texture(gcolor, screenCoord);
+    
+    float depthShadow = texture(shadowtex0, screenCoord).x;
+    vec3 ndcShadow = vec3(screenCoord * 2.0 - 1.0, depthShadow * 2.0 - 1.0);
+    vec4 viewPosShadow = gbufferProjectionInverse * vec4(ndcShadow, 1.0);
+    float sceneDepthShadow = -(viewPosShadow.z / viewPosShadow.w) / (far * 4.0);
+
+    float depthHW = texture(depthtex0, screenCoord).x;
+    vec3 ndcHW = vec3(screenCoord * 2.0 - 1.0, depthHW * 2.0 - 1.0);
+    vec4 viewPosHW = gbufferProjectionInverse * vec4(ndcHW, 1.0);
+    float sceneDepthHW = -(viewPosHW.z / viewPosHW.w) / (far * 4.0);
+
+	color = texture(gcolor, screenCoord); 
     bool cfOverride = false;
+    
     #if XRAY_ENABLED != STATE_DISABLED
-        vec4 terrainLayer = texture(colortex4, screenCoord);
-        #if !defined(XRAY_RENDER_ONTOP) && !defined(CAVEFINDER)
-            if(terrainLayer.r > sceneDepth)
-                color = texture(shadowcolor0, screenCoord);
-        #endif
-        #ifdef XRAY_RENDER_ONTOP
-            if(terrainLayer.r > EPSILON)
-                cfOverride = true;
-        #endif // XRAY_RENDER_ONTOP
-        #ifdef XRAY_RENDER_OCCLUSION
-            if(terrainLayer.r > EPSILON)
-                if(terrainLayer.r - sceneDepth < EPSILON)
-                    color = vec4(XRAY_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
-                else
-                    color = vec4(XRAY_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
-        #endif // XRAY_RENDER_OCCLUSION
-        #ifdef XRAY_RENDER_GLOW
-            if(terrainLayer.r > EPSILON)
-                glowColor = vec4(getGlowXrayColor(int(terrainLayer.g)), 1.0);
-        #endif // XRAY_RENDER_GLOW
+        vec4 shadowInfo = texture(shadowcolor1, screenCoord);
+        if (abs(shadowInfo.b - 0.5) < 0.05) {
+            vec4 xrayColor = texture(shadowcolor0, screenCoord);
+            float xrayDepth = shadowInfo.r;
+            
+            #ifdef XRAY_RENDER_ONTOP
+                if(xrayColor.a > EPSILON) {
+                    color = xrayColor;
+                    cfOverride = true;
+                }
+            #endif // XRAY_RENDER_ONTOP
+            #ifdef XRAY_RENDER_OCCLUSION
+                if(xrayColor.a > EPSILON) {
+                    if(xrayDepth - sceneDepthHW < EPSILON)
+                        color = vec4(XRAY_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
+                    else
+                        color = vec4(XRAY_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
+                }
+            #endif // XRAY_RENDER_OCCLUSION
+            #ifdef XRAY_RENDER_GLOW
+                if(xrayColor.a > EPSILON)
+                    glowColor = vec4(getGlowXrayColor(int(shadowInfo.g)), 1.0);
+            #endif // XRAY_RENDER_GLOW
+        }
     #endif // XRAY_ENABLED
     #ifdef ESP_ENABLED
         vec4 espLayer = texture(colortex5, screenCoord);
         #ifndef ESP_RENDER_ONTOP
-            if(espLayer.r > sceneDepth)
+            if(espLayer.r > sceneDepthShadow)
                 color = texture(shadowcolor0, screenCoord);
         #else
             if(espLayer.r > EPSILON)
                 cfOverride = true;
         #endif // ESP_RENDER_ONTOP
         #ifdef ESP_RENDER_OCCLUSION
-            if(espLayer.r > EPSILON)
-                if(espLayer.r - sceneDepth < EPSILON)
+            if(espLayer.r > EPSILON) {
+                if(espLayer.r - sceneDepthShadow < EPSILON)
                     color = vec4(ESP_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
                 else
                     color = vec4(ESP_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
+            }
         #endif // ESP_RENDER_OCCLUSION
         #ifdef ESP_RENDER_GLOW
             if(espLayer.r > EPSILON)
@@ -103,18 +113,19 @@ void main() {
     #ifdef CHESTESP_ENABLED
         vec4 chestespLayer = texture(colortex6, screenCoord);
         #ifndef CHESTESP_RENDER_ONTOP
-            if(chestespLayer.r > sceneDepth)
+            if(chestespLayer.r > sceneDepthShadow)
                 color = texture(shadowcolor0, screenCoord);
         #else
             if(chestespLayer.r > EPSILON)
                 cfOverride = true;
         #endif // CHESTESP_RENDER_ONTOP
         #ifdef CHESTESP_RENDER_OCCLUSION
-            if(chestespLayer.r > EPSILON)
-                if(chestespLayer.r - sceneDepth < EPSILON)
+            if(chestespLayer.r > EPSILON) {
+                if(chestespLayer.r - sceneDepthShadow < EPSILON)
                     color = vec4(CHESTESP_RENDER_OCCLUSION_COLOR_VISIBLE, 1.0);
                 else
                     color = vec4(CHESTESP_RENDER_OCCLUSION_COLOR_OCCLUDED, 1.0);
+            }
         #endif // CHESTESP_RENDER_OCCLUSION
         #ifdef CHESTESP_RENDER_GLOW
             if(chestespLayer.r > EPSILON)
@@ -125,7 +136,7 @@ void main() {
         if(cfOverride)
             return;
         float hwDepth = 1 - ((texture(depthtex0, screenCoord).r - 0.75) * 4) * (far * 4 * near);
-        if(hwDepth > sceneDepth) {
+        if(hwDepth > sceneDepthShadow) {
             color = mix(color, texture(shadowcolor0, screenCoord), CAVEFINER_RENDER_TRANSPARENCY / 100.0);
         }
     #endif // CAVEFINDER
@@ -158,6 +169,7 @@ vec3 getGlowXrayColor(int modId) {
         case RAILCRAFT:
             return XRAY_GLOW_COLOR_RAILCRAFT;
     }
+    return XRAY_GLOW_COLOR_MINECRAFT;
 }
 
 vec3 getGlowESPColor(int entityCategory) {

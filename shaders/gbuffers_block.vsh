@@ -22,6 +22,7 @@ void main()
 
 	viewPosition = gl_ModelViewMatrix * gl_Vertex;
 	
+    isEspEntity = 0;
 	#ifdef CHESTESP_ENABLED
 		if((
 		#ifdef CHESTESP_SELECT_CHEST

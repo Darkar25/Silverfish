@@ -18,6 +18,7 @@ void main() {
 
 	viewPosition = gl_ModelViewMatrix * gl_Vertex;
 	
+    isEspEntity = 0;
 	#ifdef ESP_ENABLED
 		if (shouldEsp(entityID) && (
 		#ifdef TOGGLEABLE_UI_ENABLED
